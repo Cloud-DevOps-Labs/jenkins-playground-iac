@@ -1,0 +1,5 @@
+.env
+
+POST_SETUP_INSTRUCTIONS.txt
+nginx-conf/
+ssh-keys/
