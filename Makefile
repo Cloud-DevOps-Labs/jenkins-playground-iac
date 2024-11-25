@@ -107,13 +107,16 @@ logs:
 # Limpiar todos los recursos
 clean:
 	@echo "$(RED)$(EMOJI_WARN) ¡ADVERTENCIA! Esta acción eliminará todos los contenedores y volúmenes.$(NC)"
-	@read -p "¿Estás seguro? [y/N] " -n 1 -r; \
-	echo; \
-	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-		echo "$(YELLOW)Eliminando todos los recursos...$(NC)"; \
-		$(COMPOSE) down -v; \
-		echo "$(GREEN)$(EMOJI_CHECK) Recursos eliminados correctamente$(NC)"; \
-	fi
+	@echo "¿Estás seguro? [y/N]"
+	@read REPLY; \
+	case "$$REPLY" in \
+		[Yy]) \
+			echo "$(YELLOW)Eliminando todos los recursos...$(NC)"; \
+			$(COMPOSE) down -v; \
+			echo "$(GREEN)$(EMOJI_CHECK) Recursos eliminados correctamente$(NC)";; \
+		*) \
+			echo "Operación cancelada";; \
+	esac
 
 # Configurar el agente Jenkins
 setup-agent:
