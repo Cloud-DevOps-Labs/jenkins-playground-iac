@@ -91,7 +91,7 @@ docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
 #### 4.2 Configuración Inicial de Jenkins
 1. Acceder a http://localhost:8080
 2. Introducir la contraseña inicial obtenida
-3. Seleccionar la opción de personalizar instalación e incluir: SSH Agent
+3. Seleccionar la opción de personalizar instalación e incluir el plugin: SSH Agent
 4. La creación del usuario adicional es opcional
 5. Comprobar que la dirección de Jenkins es: http://localhost:8080/
 
@@ -151,18 +151,14 @@ Local:
 
 1. Podemos forzar un despliegue con Build Now/Construir ahora
 2. Comprobamos los pasos realizados > Build #1
+
+![pipeline ok](/assets/result.png "Pipeline con resultado correcto")
+
 3. Vemos el resultado:
    - En Console Output las acciones del Jenkinsfile
    - En Status del resultado de la ejecución de ese pipeline
 
-Remoto:
-
-1. Creamos un fork del proyecto: https://github.com/<TU_USUARIO>/jenkins-playground-app
-2. Ajustamos el pipeline para que apunte a nuestro fork
-2. Hacer un commit en nbuestro repositorio
-3. Verificar que el pipeline se ejecuta automáticamente
-4. Comprobar la web desplegada en http://localhost:80
-
+![web desplegada](/assets/web_desplegada.png "Vista de la web desplegada")
 
 
 ## Estructura del Proyecto
