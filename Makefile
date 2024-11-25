@@ -19,7 +19,7 @@ EMOJI_WARN := ⚠️
 EMOJI_TOOL := 🔧
 EMOJI_KEY := 🔑
 
-.PHONY: help password up down ps master agent web clean logs setup-agent build-env status
+.PHONY: help password up down ps master agent web clean logs setup-agent setup-webserver status
 
 # Target por defecto muestra la ayuda
 help:
@@ -41,9 +41,10 @@ help:
 	@echo "  make web       - Accede al shell del servidor web"
 	@echo ""
 	@echo "$(EMOJI_GEAR) Mantenimiento:"
-	@echo "  make logs      - Muestra los logs de todos los contenedores"
-	@echo "  make clean     - Limpia todos los recursos (contenedores, volúmenes)"
-	@echo "  make setup-agent - Configura el agente Jenkins con las dependencias necesarias"
+	@echo "  make logs            - Muestra los logs de todos los contenedores"
+	@echo "  make clean           - Limpia todos los recursos (contenedores, volúmenes)"
+	@echo "  make setup-agent     - Configura el agente Jenkins con las dependencias necesarias"
+	@echo "  make setup-webserver - Configura el servidor web para que tenga ssh"
 	@echo ""
 	@echo "$(EMOJI_WARN) URLs del proyecto:"
 	@echo "  Jenkins: $(BLUE)http://localhost:8080$(NC)"
@@ -124,18 +125,13 @@ setup-agent:
 	@docker exec $(JENKINS_AGENT) rm /tmp/setup-agent.sh
 	@echo "$(GREEN)$(EMOJI_CHECK) Configuración del agente completada$(NC)"
 
-# Verificar que el entorno está listo
-build-env:
-	@echo "$(YELLOW)$(EMOJI_GEAR) Verificando el entorno...$(NC)"
-	@if [ ! -f "scripts/setup-agent.sh" ]; then \
-		echo "$(RED)Error: No se encuentra scripts/setup-agent.sh$(NC)"; \
-		exit 1; \
-	fi
-	@echo "$(GREEN)$(EMOJI_CHECK) Verificación completada$(NC)"
-	@$(MAKE) up
-	@echo "$(YELLOW)Esperando a que los servicios estén listos...$(NC)"
-	@sleep 10
-	@$(MAKE) setup-agent
-	@$(MAKE) status
-	@echo "$(GREEN)$(EMOJI_ROCKET) Entorno preparado y listo para usar$(NC)"
-
+# Configurar el servidor web
+setup-webserver:
+	@echo "$(YELLOW)$(EMOJI_GEAR) Configurando servidor web...$(NC)"
+	@docker cp scripts/setup-webserver.sh $(WEBSERVER):/tmp/
+	@docker cp ssh-keys/webserver.pub $(WEBSERVER):/tmp/
+	@docker exec $(WEBSERVER) chmod +x /tmp/setup-webserver.sh
+	@docker exec $(WEBSERVER) /tmp/setup-webserver.sh
+	@docker exec $(WEBSERVER) rm /tmp/setup-webserver.sh
+	@docker exec $(WEBSERVER) rm /tmp/webserver.pub
+	@echo "$(GREEN)$(EMOJI_CHECK) Configuración del servidor web completada$(NC)"
