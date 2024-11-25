@@ -40,8 +40,8 @@ https://github.com/Cloud-DevOps-Labs/jenkins-playground-app
 ```bash
 cd jenkins-playground-iac
 
-# Dar permisos de ejecución al script de configuración
-chmod +x scripts/initial-setup.sh
+# Dar permisos de ejecución a los scripts de configuración
+chmod +x scripts/*.sh
 
 # Ejecutar script de configuración inicial
 ./scripts/initial-setup.sh
@@ -52,6 +52,14 @@ chmod +x scripts/initial-setup.sh
 ```bash
 docker-compose up -d
 ```
+
+```bash
+
+# Configurar el agente para que tenga las dependencias
+make setup-agent
+
+```
+
 
 ### 4. Configuración de Jenkins
 
@@ -114,7 +122,8 @@ docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
 4. Configurar pipeline:
    - Pipeline from SCM
    - SCM: Git
-   - Repository URL: https://github.com/usuario/web-sample.git
+   - Repository URL: https://github.com/Cloud-DevOps-Labs/jenkins-playground-app.git
+   - Branch to build: */main
    - Script Path: Jenkinsfile
 
 ## Verificación
